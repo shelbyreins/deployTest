@@ -1,5 +1,5 @@
 import React from "react";
-import { drinks, getAllEvents } from "../UserFunctions";
+import { drinks, getAllEvents, removeEvent } from "../UserFunctions";
 import "./style.css";
 
 
@@ -36,24 +36,14 @@ class Form extends React.Component {
             value={this.props.value}
           >
             <option className="inputs">Select Event</option>
-            <option className="inputs">AA Meeting</option>
             <option className="inputs">Watched Video</option>
-            <option className="inputs">MeetUp</option>
+            <option className="inputs">AA Meeting</option>
             <option className="inputs">Alcohol Drink</option>
             <option className="inputs">No Alcohol</option>
             <option className="inputs">Other</option>
           </select>
 
-          <input className="input-main mb-2 "
-            onChange={(e) => this.props.updateQ(e.target.value)}
-            placeholder="quantity"
-            type="text">
-          </input>
-          <input className="input-main mb-3"
-            onChange={(e) => this.props.updateP(e.target.value)}
-            placeholder="price"
-            type="text">
-          </input>
+          <br/>
 
           <button type="submit" className="btn-main" id="btn-calendar">Add Event</button>
         </div>
@@ -75,8 +65,6 @@ class Calendar extends React.Component {
       event: "",
       events: {},
       quantity: ""
-      // drink: "",
-      // price: ""
     };
     this.setDay = this.setDay.bind(this);
     this.setDate = this.setDate.bind(this);
@@ -86,8 +74,6 @@ class Calendar extends React.Component {
 
     this.addEvent = this.addEvent.bind(this);
     this.updateEvent = this.updateEvent.bind(this);
-    this.updateQuantity = this.updateQuantity.bind(this);
-    this.updatePrice = this.updatePrice.bind(this);
     this.saveEvents = this.saveEvents.bind(this);
     this.loadEvents = this.loadEvents.bind(this);
   }
@@ -142,30 +128,21 @@ class Calendar extends React.Component {
   }
 
   saveEvents() {
-    localStorage.setItem("events", JSON.stringify(this.state.events));
 
     localStorage.setItem("event", this.state.event);
-    localStorage.setItem("quantity", this.state.quantity);
-    localStorage.setItem("price", this.state.price);
     let userData = {
       userId: localStorage.getItem("userId"),
       event: localStorage.getItem("event"),
-      quantity: localStorage.getItem("quantity"),
-      price: localStorage.getItem("price"),
       date: this.state.cursor
     }
     drinks(userData).then(res => {
       if (res) {
 
-        // this.props.history.push(`/addDr`);
-        console.log(res);
-        // window.location.reload();
-
+        
       }
     })
   }
   loadEvents() {
-    // let events = localStorage.getItem("events");
     let occasions = {};
     let userId = {
       userId: localStorage.getItem("userId"),
@@ -178,6 +155,7 @@ class Calendar extends React.Component {
         });
         if (occasions) {
           this.setState({ events: occasions });
+          localStorage.setItem("events", this.state.events);
         }
       }
     });
@@ -189,10 +167,10 @@ class Calendar extends React.Component {
     return [];
   }
   updateEvent(e) { this.setState({ event: e }); }
-  updateQuantity(e) { this.setState({ quantity: e }); }
-  updatePrice(e) { this.setState({ price: e }); }
+
   addEvent(e) {
     if (e) e.preventDefault();
+    console.log("e: ", e);
     let event = this.state.event.trim();
     if (!event) return;
     let events = this.state.events;
@@ -200,16 +178,33 @@ class Calendar extends React.Component {
     if (!events[date]) events[date] = [];
     events[date].push(event);
     this.setState({ event: "", events: events });
-    this.saveEvents();
+    this.saveEvents()
   }
   removeEvents(date) {
     let events = this.state.events;
-    delete events[date];
+    let event = localStorage.getItem("event");
+    let userId = localStorage.getItem("userId");
+    delete events[this.date];
+
+    const userData = {
+      userId: userId,
+      date: date,
+      event: event
+    };
+
+
+    removeEvent(userData)
+      .then(res => {
+      })
+      .catch(err => {
+        console.log("err: ", err);
+      })
     this.setState({ events: events });
   }
   removeEvent(date, idx) {
     if (this.state.events[date]) {
       let events = this.state.events;
+      localStorage.setItem("event", events[date]);
       events[date].splice(idx, 1);
       if (!events[date].length) {
         this.removeEvents(date);
@@ -311,8 +306,7 @@ class Calendar extends React.Component {
 
                 {/* New event */}
                 <div className="event-add">
-                  {/* <h2>Add new event</h2> */}
-                  <Form value={this.state.event} submit={this.addEvent} update={this.updateEvent} updateQ={this.updateQuantity} updateP={this.updatePrice} />
+                  <Form value={this.state.event} submit={this.addEvent} update={this.updateEvent} />
                 </div>
               </div>    
       </React.Fragment>

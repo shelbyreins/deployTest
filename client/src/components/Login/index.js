@@ -25,11 +25,9 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     }
-    localStorage.setItem("email", this.state.email);
+    // localStorage.setItem("email", this.state.email);
     login(user).then(res => {
 
-      console.log("res from /login: " + JSON.stringify(res));
-      // if (res.email !== undefined) {
       if (res.userId !== undefined) {
 
         

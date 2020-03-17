@@ -65,7 +65,6 @@ class AddEvent extends Component {
     };
 
     render() {
-        console.log("this.state: " + JSON.stringify(this.state));
         return (
             <div>
                 <Modal
