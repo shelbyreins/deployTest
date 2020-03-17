@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const routes = require("./routes/Users");
 const apiRoutes = require("./routes/api-routes");
 const drinks = require("./routes/Drinks");
-// const path = require('path');
+const path = require('path');
 
 
 var PORT = process.env.PORT || 3001;
@@ -24,9 +24,9 @@ app.use(
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
 
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-  // });
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
 }
 
 
