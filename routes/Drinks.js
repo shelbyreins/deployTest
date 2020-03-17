@@ -31,7 +31,7 @@ drinks.get("/getAllEvents/:userId", function (req, res) {
     });
 });
 
-drinks.get("/removeEvent/:userId/:date/:event", function (req, res) {
+drinks.get("/deleteEvent/:userId/:date/:event", function (req, res) {
     Drink.deleteOne({ userId: req.params.userId, date: req.params.date, event: req.params.event })
         .then(function (events) {
             res.json(events);

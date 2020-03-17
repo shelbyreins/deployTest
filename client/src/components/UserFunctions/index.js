@@ -71,9 +71,9 @@ export const getAllEvents = event => {
     })
 }
 
-export const removeEvent = event => {
+export const deleteEvent = event => {
   return axios
-    .get("/removeEvent/" + event.userId + "/" + event.date + "/" + event.event)
+    .get("/deleteEvent/" + event.userId + "/" + event.date + "/" + event.event)
     .then(response => {
       console.log("response from getAllEvents(userFunctions): " + JSON.stringify(response));
       return response.data;

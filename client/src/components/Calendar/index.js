@@ -1,5 +1,5 @@
 import React from "react";
-import { drinks, getAllEvents, removeEvent } from "../UserFunctions";
+import { drinks, getAllEvents, deleteEvent } from "../UserFunctions";
 import "./style.css";
 
 
@@ -43,7 +43,7 @@ class Form extends React.Component {
             <option className="inputs">Other</option>
           </select>
 
-          <br/>
+          <br />
 
           <button type="submit" className="btn-main" id="btn-calendar">Add Event</button>
         </div>
@@ -138,16 +138,16 @@ class Calendar extends React.Component {
     drinks(userData).then(res => {
       if (res) {
 
-        
+
       }
     })
   }
   loadEvents() {
     let occasions = {};
-    let userId = {
+    let userData = {
       userId: localStorage.getItem("userId"),
     };
-    getAllEvents(userId).then(res => {
+    getAllEvents(userData).then(res => {
       if (res) {
 
         // res.forEach(entry => {
@@ -156,6 +156,7 @@ class Calendar extends React.Component {
         for (let i = 0; i < res.length; i++) {
           occasions[res[i].date] = res[i].event;
         }
+        console.log("occasions: ", occasions);
         if (occasions) {
           this.setState({ events: occasions });
           localStorage.setItem("events", this.state.events);
@@ -196,7 +197,7 @@ class Calendar extends React.Component {
     };
 
 
-    removeEvent(userData)
+    deleteEvent(userData)
       .then(res => {
       })
       .catch(err => {
@@ -283,35 +284,35 @@ class Calendar extends React.Component {
 
     return (
       <React.Fragment>
-              <div id="border">
-                <div className="calendar" >
-                  {/* Month selector */}
-                  <div className="month">
-                    <span className="month-active">
-                      <b>{this.getMonthName(this.state.month)}</b>{" " + this.state.year}
-                    </span>
-                    <span className="month-selector">
-                      <a className="prev" href="#" onClick={this.prevMonth}>⟵</a>
-                      <a className="reset" href="#" onClick={this.resetDate}>○</a>
-                      <a className="next" href="#" onClick={this.nextMonth}>⟶</a>
-                    </span>
-                  </div>
-                  {/* Days grid */}
-                  <div className="weekdays">{dayNames}</div>
-                  <div className="days">{days}</div>
-                </div>
+        <div id="border">
+          <div className="calendar" >
+            {/* Month selector */}
+            <div className="month">
+              <span className="month-active">
+                <b>{this.getMonthName(this.state.month)}</b>{" " + this.state.year}
+              </span>
+              <span className="month-selector">
+                <a className="prev" href="#" onClick={this.prevMonth}>⟵</a>
+                <a className="reset" href="#" onClick={this.resetDate}>○</a>
+                <a className="next" href="#" onClick={this.nextMonth}>⟶</a>
+              </span>
+            </div>
+            {/* Days grid */}
+            <div className="weekdays">{dayNames}</div>
+            <div className="days">{days}</div>
+          </div>
 
-                {/* Event list */}
-                <div className="events">
-                  <h4 className="date-active">{this.state.cursor}</h4>
-                  {events.length > 0 && (<ul className="ml-5">{events}</ul>)}
-                </div>
+          {/* Event list */}
+          <div className="events">
+            <h4 className="date-active">{this.state.cursor}</h4>
+            {events.length > 0 && (<ul className="ml-5">{events}</ul>)}
+          </div>
 
-                {/* New event */}
-                <div className="event-add">
-                  <Form value={this.state.event} submit={this.addEvent} update={this.updateEvent} />
-                </div>
-              </div>    
+          {/* New event */}
+          <div className="event-add">
+            <Form value={this.state.event} submit={this.addEvent} update={this.updateEvent} />
+          </div>
+        </div>
       </React.Fragment>
     );
   }
