@@ -22,7 +22,11 @@ drinks.post("/addDrink", function (req, res) {
 });
 
 drinks.get("/getAllEvents/:userId", function (req, res) {
-    Drink.find({ userId: req.params.userId })
+    const drinkData = {
+        userId: req.params.userId
+    };
+
+    Drink.find(drinkData)
         .then(function (events) {
             res.json(events);
         })

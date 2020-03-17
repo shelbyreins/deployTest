@@ -147,6 +147,7 @@ class Calendar extends React.Component {
     let userData = {
       userId: localStorage.getItem("userId"),
     };
+    console.log("events: ", this.state.events);
     getAllEvents(userData).then(res => {
       if (res) {
 
