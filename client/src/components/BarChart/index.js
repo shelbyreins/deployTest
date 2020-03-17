@@ -21,8 +21,27 @@ class BarChart extends Component {
 
         getAllEvents(userId).then(res => {
             if (res) {
-                res.forEach(entry => {
-                    switch (entry.event) {
+                // res.forEach(entry => {
+                //     switch (entry.event) {
+                //         case "Watched Video":
+                //             watchedVideo++;
+                //             break;
+                //         case "AA Meeting":
+                //             attendAA++;
+                //             break;
+                //         case "Alcohol Drink":
+                //             alc++;
+                //             break;
+                //         case "No Alcohol":
+                //             noAlc++;
+                //             break;
+                //         case "Other":
+                //             other++;
+                //             break;
+                //     }
+                // });
+                for (let i = 0; i < res.length; i++) {
+                    switch (res[i].event) {
                         case "Watched Video":
                             watchedVideo++;
                             break;
@@ -39,7 +58,7 @@ class BarChart extends Component {
                             other++;
                             break;
                     }
-                });
+                }
                 window.options = {
                     animationEnabled: true,
                     theme: "light2",

@@ -150,9 +150,12 @@ class Calendar extends React.Component {
     getAllEvents(userId).then(res => {
       if (res) {
 
-        res.forEach(entry => {
-          occasions[entry.date] = [entry.event];
-        });
+        // res.forEach(entry => {
+        //   occasions[entry.date] = [entry.event];
+        // });
+        for (let i = 0; i < res.length; i++) {
+          occasions[res[i].date] = res[i].event;
+        }
         if (occasions) {
           this.setState({ events: occasions });
           localStorage.setItem("events", this.state.events);
