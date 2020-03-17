@@ -153,6 +153,7 @@ class Calendar extends React.Component {
         // res.forEach(entry => {
         //   occasions[entry.date] = [entry.event];
         // });
+        console.log("res: ", res);
         for (let i = 0; i < res.length; i++) {
           occasions[res[i].date] = res[i].event;
         }
