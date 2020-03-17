@@ -21,9 +21,8 @@ class BarChart extends Component {
 
         getAllEvents(userId).then(res => {
             if (res) {
-
-                for (let i = 0; i < res.length; i++) {
-                    switch (res[i].event) {
+                res.forEach(entry => {
+                    switch (entry.event) {
                         case "Watched Video":
                             watchedVideo++;
                             break;
@@ -40,7 +39,7 @@ class BarChart extends Component {
                             other++;
                             break;
                     }
-                }
+                });
                 window.options = {
                     animationEnabled: true,
                     theme: "light2",

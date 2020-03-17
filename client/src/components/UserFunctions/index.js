@@ -64,7 +64,6 @@ export const getAllEvents = event => {
   return axios
     .get("/getAllEvents/" + event.userId)
     .then(response => {
-      console.log("response(getAllEvents): ", response);
       return response.data;
     })
     .catch(err => {
@@ -72,9 +71,9 @@ export const getAllEvents = event => {
     })
 }
 
-export const deleteEvent = event => {
+export const removeEvent = event => {
   return axios
-    .get("/deleteEvent/" + event.userId + "/" + event.date + "/" + event.event)
+    .get("/removeEvent/" + event.userId + "/" + event.date + "/" + event.event)
     .then(response => {
       return response.data;
     })

@@ -1,5 +1,5 @@
 import React from "react";
-import { drinks, getAllEvents, deleteEvent } from "../UserFunctions";
+import { drinks, getAllEvents, removeEvent } from "../UserFunctions";
 import "./style.css";
 
 
@@ -8,22 +8,14 @@ class Day extends React.Component {
   constructor(props) { super(props); }
   render() {
     let cls = (this.props.selected) ? " day-active" : "";
-    if (this.props.cursor!=undefined){
-       console.log("EVENTS" , this.props.events) 
-      if(this.props.events != undefined)
-      cls += " has-events";
-      else{
-        cls +=" "
-      }
-    } 
+    if (this.props.hasEvents) cls += " has-events";
     if (this.props.hasMatches) cls += " has-matches";
- console.log("PROPS", this.props, this.props.getEvent)
-    let day = this.props.day;
 
+    let day = this.props.day;
     return (
       day > 0
         ? (
-          <div className={"day" + cls} onClick={e => this.props.setDay(this.props.day, e)}>
+          <div id="day" className={"day" + cls} onClick={e => this.props.setDay(this.props.day, e)}>
             {this.props.day}
           </div>
         )
@@ -51,7 +43,7 @@ class Form extends React.Component {
             <option className="inputs">Other</option>
           </select>
 
-          <br />
+          <br/>
 
           <button type="submit" className="btn-main" id="btn-calendar">Add Event</button>
         </div>
@@ -71,7 +63,7 @@ class Calendar extends React.Component {
       cursor: "",
       search: "",
       event: "",
-      events: [],
+      events: {},
       quantity: ""
     };
     this.setDay = this.setDay.bind(this);
@@ -113,7 +105,6 @@ class Calendar extends React.Component {
     if (e) e.preventDefault();
     let date = this.formatDate(day, month, year);
     this.setState({ cursor: date });
-    console.log("DATE CHECKING:" , date)
   }
   setDay(day, e) {
     this.setDate(day, this.state.month, this.state.year, e);
@@ -147,39 +138,31 @@ class Calendar extends React.Component {
     drinks(userData).then(res => {
       if (res) {
 
-
+        
       }
     })
   }
   loadEvents() {
     let occasions = {};
-    let userData = {
+    let userId = {
       userId: localStorage.getItem("userId"),
     };
-    console.log("events: ", this.state.events);
-    getAllEvents(userData).then(res => {
+    getAllEvents(userId).then(res => {
       if (res) {
-        this.setState({
-          events:res.event
-        })
-        // res.forEach(entry => {
-        //   occasions[entry.date] = [entry.event];
-        // });
-        console.log("res: ", res);
-        // for (let i = 0; i < res.length; i++) {
-        //   occasions[res[i].date] = res[i].event;
-        // }
-        console.log("occasions: ", occasions);
-        // if (occasions) {
-        //   this.setState({ events: occasions });
+
+        res.forEach(entry => {
+          occasions[entry.date] = [entry.event];
+        });
+        if (occasions) {
+          this.setState({ events: occasions });
           localStorage.setItem("events", this.state.events);
-        // }
+        }
       }
     });
   }
-  getEvents() {
-    if (this.state.events) {
-      return this.state.events;
+  getEvents(key) {
+    if (this.state.events[key]) {
+      return this.state.events[key];
     }
     return [];
   }
@@ -192,8 +175,8 @@ class Calendar extends React.Component {
     if (!event) return;
     let events = this.state.events;
     let date = this.state.cursor;
-    if (!events) events = [];
-    events.push(event);
+    if (!events[date]) events[date] = [];
+    events[date].push(event);
     this.setState({ event: "", events: events });
     this.saveEvents()
   }
@@ -201,11 +184,7 @@ class Calendar extends React.Component {
     let events = this.state.events;
     let event = localStorage.getItem("event");
     let userId = localStorage.getItem("userId");
-    for (var i =0; i < events.length; i++)
-   if (events[i].cursor === date) {
-      events.splice(i,1);
-      break;
-   }
+    delete events[this.date];
 
     const userData = {
       userId: userId,
@@ -214,7 +193,7 @@ class Calendar extends React.Component {
     };
 
 
-    deleteEvent(userData)
+    removeEvent(userData)
       .then(res => {
       })
       .catch(err => {
@@ -223,11 +202,11 @@ class Calendar extends React.Component {
     this.setState({ events: events });
   }
   removeEvent(date, idx) {
-    if (this.state.events) {
+    if (this.state.events[date]) {
       let events = this.state.events;
-      localStorage.setItem("event", events);
-      events.splice(idx, 1);
-      if (!events.length) {
+      localStorage.setItem("event", events[date]);
+      events[date].splice(idx, 1);
+      if (!events[date].length) {
         this.removeEvents(date);
       } else {
         this.setState({ events: events });
@@ -269,32 +248,23 @@ class Calendar extends React.Component {
         let selected = (item == cursorDate[0]) && thisMonth;
 
         let hasEvents = thisMonth &&
-          (Array.isArray(this.state.events)) &&
-          (this.state.events.length);
-        let events = hasEvents ? this.state.events: [];
+          (Array.isArray(this.state.events[date])) &&
+          (this.state.events[date].length);
+        let events = hasEvents ? this.state.events[date] : [];
 
         let hasMatches = false;
-        console.log("SET DAY", this.setDay)
-        // if (hasEvents && this.state.search) {
-        //   for (let i = 0; i < events.length; ++i) {
-        //     if (events[i].includes(this.state.search)) {
-        //       hasMatches = true; break;
-        //     }
-        //   }
-        // }
-        console.log("ITEM:", item)
-        console.log("DATE" ,date)
-        console.log("This Date Cursor", this.state.cursor)
-        console.log("DAY", this.state.day)
-        console.log("EVENTS:", this.state.events)
-
+        if (hasEvents && this.state.search) {
+          for (let i = 0; i < events.length; ++i) {
+            if (events[i].includes(this.state.search)) {
+              hasMatches = true; break;
+            }
+          }
+        }
         return (
-
-          <Day key={i} day={item} selected={selected} cursor={this.state.cursor}
-            hasEvents={ hasEvents} hasMatches={hasMatches} getEvents={this.getEvents} events={this.state.events}
+          <Day key={i} day={item} selected={selected}
+            hasEvents={hasEvents} hasMatches={hasMatches}
             setDay={this.setDay}
           />
-
         );
       } else {
         return (<Day key={i} day={-1} />);
@@ -310,35 +280,35 @@ class Calendar extends React.Component {
 
     return (
       <React.Fragment>
-        <div id="border">
-          <div className="calendar" >
-            {/* Month selector */}
-            <div className="month">
-              <span className="month-active">
-                <b>{this.getMonthName(this.state.month)}</b>{" " + this.state.year}
-              </span>
-              <span className="month-selector">
-                <a className="prev" href="#" onClick={this.prevMonth}>⟵</a>
-                <a className="reset" href="#" onClick={this.resetDate}>○</a>
-                <a className="next" href="#" onClick={this.nextMonth}>⟶</a>
-              </span>
-            </div>
-            {/* Days grid */}
-            <div className="weekdays">{dayNames}</div>
-            <div className="days">{days}</div>
-          </div>
+              <div id="border">
+                <div className="calendar" >
+                  {/* Month selector */}
+                  <div className="month">
+                    <span className="month-active">
+                      <b>{this.getMonthName(this.state.month)}</b>{" " + this.state.year}
+                    </span>
+                    <span className="month-selector">
+                      <a className="prev" href="#" onClick={this.prevMonth}>⟵</a>
+                      <a className="reset" href="#" onClick={this.resetDate}>○</a>
+                      <a className="next" href="#" onClick={this.nextMonth}>⟶</a>
+                    </span>
+                  </div>
+                  {/* Days grid */}
+                  <div className="weekdays">{dayNames}</div>
+                  <div className="days">{days}</div>
+                </div>
 
-          {/* Event list */}
-          <div className="events">
-            <h4 className="date-active">{this.state.cursor}</h4>
-            {events.length > 0 && (<ul className="ml-5">{events}</ul>)}
-          </div>
+                {/* Event list */}
+                <div className="events">
+                  <h4 className="date-active">{this.state.cursor}</h4>
+                  {events.length > 0 && (<ul className="ml-5">{events}</ul>)}
+                </div>
 
-          {/* New event */}
-          <div className="event-add">
-            <Form value={this.state.event} submit={this.addEvent} update={this.updateEvent} />
-          </div>
-        </div>
+                {/* New event */}
+                <div className="event-add">
+                  <Form value={this.state.event} submit={this.addEvent} update={this.updateEvent} />
+                </div>
+              </div>    
       </React.Fragment>
     );
   }
