@@ -1,3 +1,4 @@
+/* App.js */
 import React, { Component } from 'react';
 import { getAllEvents } from "../UserFunctions";
 import CanvasJSReact from './canvasjs/canvasjs.react';
@@ -6,10 +7,15 @@ var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 class BarChart extends Component {
+    componentDidUpdate() {
+        
+    }
 
     render() {
+
         let attendAA = 0;
         let watchedVideo = 0;
+        let meetUp = 0;
         let alc = 0;
         let noAlc = 0;
         let other = 0;
@@ -28,6 +34,9 @@ class BarChart extends Component {
                             break;
                         case "AA Meeting":
                             attendAA++;
+                            break;
+                        case "MeetUp":
+                            meetUp++;
                             break;
                         case "Alcohol Drink":
                             alc++;
@@ -48,7 +57,7 @@ class BarChart extends Component {
                     },
                     axisX: {
                         title: "Events",
-                        reversed: true
+                        reversed: true,
                     },
                     axisY: {
                         interval: 2,
@@ -60,9 +69,10 @@ class BarChart extends Component {
                         dataPoints: [
                             { y: attendAA, label: "Attend AA" },
                             { y: watchedVideo, label: "Watched Video" },
+                            { y: meetUp, label: "MeetUp" },
                             { y: alc, label: "Alcohol" },
                             { y: noAlc, label: "No Alcohol" },
-                            { y: other, label: "Other" }
+                            { y: other, label: "Other" },
                         ]
                     }]
                 }
@@ -72,8 +82,9 @@ class BarChart extends Component {
         return (
             <div>
                 <CanvasJSChart options={window.options}
-                
+                /* onRef={ref => this.chart = ref} */
                 />
+                {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
             </div>
         );
 

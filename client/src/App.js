@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Landing from './components/Landing';
-import Login from './components/Login';
-import Register from './components/Register';
-import Resources from './components/Resource';
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
+import Navbar from './components/Navbar'
+import Landing from './components/Landing'
+import Login from './components/Login'
+import Register from './components/Register'
+import Resources from './components/Resource'
+// import Profile from './components/Profile'
 import CalendarPage from "./pages/CalendarPage";
 
 

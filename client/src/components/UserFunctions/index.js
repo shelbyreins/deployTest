@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export const register = newUser => {
   return axios
@@ -12,6 +12,7 @@ export const register = newUser => {
       weight: newUser.weight,
     })
     .then(response => {
+      console.log('Registered')
     })
 }
 
@@ -22,6 +23,7 @@ export const login = user => {
       password: user.password
     })
     .then(response => {
+      // console.log("response.data: " + response.data);
       localStorage.setItem('usertoken', response.data.token);
       localStorage.setItem("userId", response.data.userId);
       return response.data;
@@ -37,6 +39,7 @@ export const getProfile = user => {
       headers: { Authorization: ` ${this.getToken()}` }
     })
     .then(response => {
+      console.log("********************" + response)
       return response.data
     })
     .catch(err => {
@@ -49,7 +52,12 @@ export const drinks = drink => {
     .post("addDrink", {
       userId: drink.userId,
       event: drink.event,
+      allEvents: drink.allEvents,
+      quantity: drink.quantity,
+      price: drink.price,
       date: drink.date
+      // drink: drink.drink,
+      // price: drink.price
     })
     .then(response => {
       console.log(response)
@@ -61,23 +69,14 @@ export const drinks = drink => {
 }
 
 export const getAllEvents = event => {
+  console.log("userId(UserFunctions): " + event.userId);
   return axios
     .get("/getAllEvents/" + event.userId)
     .then(response => {
+      console.log("response from getAllEvents(userFunctions): " + JSON.stringify(response));
       return response.data;
     })
     .catch(err => {
       console.log(err);
     })
-}
-
-export const removeEvent = event => {
-  return axios
-    .get("/removeEvent/" + event.userId + "/" + event.date + "/" + event.event)
-    .then(response => {
-      return response.data;
-    })
-    .catch(err => {
-      console.log(err);
-    });
 }

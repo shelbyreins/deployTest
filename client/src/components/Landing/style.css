@@ -4,6 +4,7 @@
    
 }
 #details{
+   /* margin-right: 30px; */
    margin-top: 0px;
    margin-bottom: 0px;
    background-color: rgba(62, 113, 145, 0.351);
@@ -13,13 +14,22 @@
 .steps{
    font-size: 2.5em;
    font-weight: bold;
+   /* margin-right:200px; */
    
 }
+/* .carousel-caption {
+   background-position: center center;
+}
 
+.carousel-caption h1 {
+   margin: 0;
+  color: white;
+} */
 
 .carousel-caption {
    z-index:10;
    color:#fff;
+   /* text-align:center; */
    bottom:auto;
    -webkit-transform:translate(0, -50%);
    -ms-transform:translate(0, -50%);
@@ -63,6 +73,7 @@
       .carousel-caption {
          z-index:10;
          color:#fff;
+         /* text-align:center; */
          bottom:0px;
          padding-bottom: 0px;
          top:40%;
@@ -83,6 +94,7 @@
       .carousel-caption {
          z-index:10;
          color:#fff;
+         /* text-align:center; */
          bottom:0px;
          padding-bottom: 0px;
          top:40%;

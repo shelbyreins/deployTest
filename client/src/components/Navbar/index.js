@@ -15,12 +15,12 @@ class Navbar extends Component {
       <div className="navbar-nav " >
         <div className="nav-item">
           <Link to="/login" className="nav-link" >
-            <span className="glyphicon glyphicon-log-in"></span> Login
+            <span class="glyphicon glyphicon-log-in"></span> Login
           </Link>
         </div>
         <div className="nav-item">
           <Link to="/register" className="nav-link">
-            <span className="glyphicon glyphicon-user"></span> Register
+            <span class="glyphicon glyphicon-user"></span> Register
           </Link>
         </div>
       </div>
@@ -52,7 +52,7 @@ class Navbar extends Component {
       <nav className="navbar navbar-expand-lg navbar-dark" id="navbar">
 
         <div to="/" className="navbar-brand">
-          <img src="logo11.png" alt="logo" id="logo" />
+          <img src="../logo11.png" alt="logo" id="logo" />
         </div>
 
         <button
