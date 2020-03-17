@@ -1,0 +1,39 @@
+#navbar{
+    padding-bottom:25px;
+    background-color: rgb(4, 4, 4) !important;
+   margin-bottom:0px;
+   border-radius: 0px;
+   padding-top: 10px;
+    
+}
+.navbar-brand{
+    padding:0px;
+    text-align: center;
+}
+
+.nav-link{
+    font-size: 1.2em;
+    padding: 0px;
+    padding-left:0px;
+    letter-spacing: 1.2px
+}
+
+#logo{
+    width: 40%;
+    padding: 0px;
+    margin: 0px;
+}
+
+#links{
+    float:right
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color:white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size:1.4em;
+    padding-left: 10px;
+}
+.navbar-dark:hover .navbar-nav:hover .nav-link:hover {
+    color:lightblue;
+}
