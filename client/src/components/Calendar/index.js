@@ -8,14 +8,22 @@ class Day extends React.Component {
   constructor(props) { super(props); }
   render() {
     let cls = (this.props.selected) ? " day-active" : "";
-    if (this.props.hasEvents) cls += " has-events";
+    if (this.props.cursor!=undefined){
+       console.log("EVENTS" , this.props.events) 
+      if(this.props.events != undefined)
+      cls += " has-events";
+      else{
+        cls +=" "
+      }
+    } 
     if (this.props.hasMatches) cls += " has-matches";
-
+ console.log("PROPS", this.props, this.props.getEvent)
     let day = this.props.day;
+
     return (
       day > 0
         ? (
-          <div id="day" className={"day" + cls} onClick={e => this.props.setDay(this.props.day, e)}>
+          <div className={"day" + cls} onClick={e => this.props.setDay(this.props.day, e)}>
             {this.props.day}
           </div>
         )
@@ -63,7 +71,7 @@ class Calendar extends React.Component {
       cursor: "",
       search: "",
       event: "",
-      events: {},
+      events: [],
       quantity: ""
     };
     this.setDay = this.setDay.bind(this);
@@ -105,6 +113,7 @@ class Calendar extends React.Component {
     if (e) e.preventDefault();
     let date = this.formatDate(day, month, year);
     this.setState({ cursor: date });
+    console.log("DATE CHECKING:" , date)
   }
   setDay(day, e) {
     this.setDate(day, this.state.month, this.state.year, e);
@@ -150,25 +159,27 @@ class Calendar extends React.Component {
     console.log("events: ", this.state.events);
     getAllEvents(userData).then(res => {
       if (res) {
-
+        this.setState({
+          events:res.event
+        })
         // res.forEach(entry => {
         //   occasions[entry.date] = [entry.event];
         // });
         console.log("res: ", res);
-        for (let i = 0; i < res.length; i++) {
-          occasions[res[i].date] = res[i].event;
-        }
+        // for (let i = 0; i < res.length; i++) {
+        //   occasions[res[i].date] = res[i].event;
+        // }
         console.log("occasions: ", occasions);
-        if (occasions) {
-          this.setState({ events: occasions });
+        // if (occasions) {
+        //   this.setState({ events: occasions });
           localStorage.setItem("events", this.state.events);
-        }
+        // }
       }
     });
   }
-  getEvents(key) {
-    if (this.state.events[key]) {
-      return this.state.events[key];
+  getEvents() {
+    if (this.state.events) {
+      return this.state.events;
     }
     return [];
   }
@@ -181,8 +192,8 @@ class Calendar extends React.Component {
     if (!event) return;
     let events = this.state.events;
     let date = this.state.cursor;
-    if (!events[date]) events[date] = [];
-    events[date].push(event);
+    if (!events) events = [];
+    events.push(event);
     this.setState({ event: "", events: events });
     this.saveEvents()
   }
@@ -190,7 +201,11 @@ class Calendar extends React.Component {
     let events = this.state.events;
     let event = localStorage.getItem("event");
     let userId = localStorage.getItem("userId");
-    delete events[this.date];
+    for (var i =0; i < events.length; i++)
+   if (events[i].cursor === date) {
+      events.splice(i,1);
+      break;
+   }
 
     const userData = {
       userId: userId,
@@ -208,11 +223,11 @@ class Calendar extends React.Component {
     this.setState({ events: events });
   }
   removeEvent(date, idx) {
-    if (this.state.events[date]) {
+    if (this.state.events) {
       let events = this.state.events;
-      localStorage.setItem("event", events[date]);
-      events[date].splice(idx, 1);
-      if (!events[date].length) {
+      localStorage.setItem("event", events);
+      events.splice(idx, 1);
+      if (!events.length) {
         this.removeEvents(date);
       } else {
         this.setState({ events: events });
@@ -254,23 +269,32 @@ class Calendar extends React.Component {
         let selected = (item == cursorDate[0]) && thisMonth;
 
         let hasEvents = thisMonth &&
-          (Array.isArray(this.state.events[date])) &&
-          (this.state.events[date].length);
-        let events = hasEvents ? this.state.events[date] : [];
+          (Array.isArray(this.state.events)) &&
+          (this.state.events.length);
+        let events = hasEvents ? this.state.events: [];
 
         let hasMatches = false;
-        if (hasEvents && this.state.search) {
-          for (let i = 0; i < events.length; ++i) {
-            if (events[i].includes(this.state.search)) {
-              hasMatches = true; break;
-            }
-          }
-        }
+        console.log("SET DAY", this.setDay)
+        // if (hasEvents && this.state.search) {
+        //   for (let i = 0; i < events.length; ++i) {
+        //     if (events[i].includes(this.state.search)) {
+        //       hasMatches = true; break;
+        //     }
+        //   }
+        // }
+        console.log("ITEM:", item)
+        console.log("DATE" ,date)
+        console.log("This Date Cursor", this.state.cursor)
+        console.log("DAY", this.state.day)
+        console.log("EVENTS:", this.state.events)
+
         return (
-          <Day key={i} day={item} selected={selected}
-            hasEvents={hasEvents} hasMatches={hasMatches}
+
+          <Day key={i} day={item} selected={selected} cursor={this.state.cursor}
+            hasEvents={ hasEvents} hasMatches={hasMatches} getEvents={this.getEvents} events={this.state.events}
             setDay={this.setDay}
           />
+
         );
       } else {
         return (<Day key={i} day={-1} />);
