@@ -21,8 +21,8 @@ class Day extends React.Component {
         )
         : (<div className="day day-empty"></div>)
     );
-  }
-}
+  };
+};
 
 class Form extends React.Component {
   constructor(p) { super(p); }
@@ -49,8 +49,8 @@ class Form extends React.Component {
         </div>
       </form>
     );
-  }
-}
+  };
+};
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -76,56 +76,56 @@ class Calendar extends React.Component {
     this.updateEvent = this.updateEvent.bind(this);
     this.saveEvents = this.saveEvents.bind(this);
     this.loadEvents = this.loadEvents.bind(this);
-  }
+  };
 
   componentWillMount() {
     window.addEventListener('unload', this.saveEvents);
     this.setDate(this.props.day, this.props.month - 1, this.state.year);
     this.loadEvents();
-  }
+  };
   componentWillUnmount() {
     window.removeEventListener('unload', this.saveEvents);
     this.saveEvents();
-  }
+  };
 
   getMonthName(idx) {
     return ["January", "February", "March", "April",
       "May", "June", "July", "August", "September",
       "October", "November", "December"][idx];
-  }
+  };
 
   formatDate(day, month, year) {
     day = (day.toString().length < 2) ? '0' + day : day;
     month += 1;
     month = (month.toString().length < 2) ? '0' + month : month;
     return `${day}.${month}.${year}`;
-  }
+  };
 
   setDate(day, month, year, e) {
     if (e) e.preventDefault();
     let date = this.formatDate(day, month, year);
     this.setState({ cursor: date });
-  }
+  };
   setDay(day, e) {
     this.setDate(day, this.state.month, this.state.year, e);
-  }
+  };
   resetDate(e) {
     e.preventDefault();
     this.setState({ year: this.props.year, month: this.props.month - 1, day: this.props.day });
     this.setDate(this.props.day, this.props.month - 1, this.props.year);
-  }
+  };
   prevMonth(e) {
     e.preventDefault();
     let m = (this.state.month - 1 === -1) ? 11 : this.state.month - 1;
     let y = (m === 11) ? this.state.year - 1 : this.state.year;
     this.setState({ year: y, month: m });
-  }
+  };
   nextMonth(e) {
     e.preventDefault();
     let m = (this.state.month + 1 === 12) ? 0 : this.state.month + 1;
     let y = (m === 0) ? this.state.year + 1 : this.state.year;
     this.setState({ year: y, month: m });
-  }
+  };
 
   saveEvents() {
 
@@ -134,14 +134,14 @@ class Calendar extends React.Component {
       userId: localStorage.getItem("userId"),
       event: localStorage.getItem("event"),
       date: this.state.cursor
-    }
+    };
     drinks(userData).then(res => {
       if (res) {
 
         
-      }
-    })
-  }
+      };
+    });
+  };
   loadEvents() {
     let occasions = {};
     let userId = {
@@ -157,17 +157,17 @@ class Calendar extends React.Component {
         if (occasions) {
           this.setState({ events: occasions });
           localStorage.setItem("events", this.state.events);
-        }
-      }
+        };
+      };
     });
-  }
+  };
   getEvents(key) {
     if (this.state.events[key]) {
       return this.state.events[key];
-    }
+    };
     return [];
-  }
-  updateEvent(e) { this.setState({ event: e }); }
+  };
+  updateEvent(e) { this.setState({ event: e }); };
 
   addEvent(e) {
     if (e) e.preventDefault();
@@ -180,7 +180,7 @@ class Calendar extends React.Component {
     events[date].push(event);
     this.setState({ event: "", events: events });
     this.saveEvents()
-  }
+  };
   removeEvents(date) {
     let events = this.state.events;
     let event = localStorage.getItem("event");
@@ -201,7 +201,7 @@ class Calendar extends React.Component {
         console.log("err: ", err);
       })
     this.setState({ events: events });
-  }
+  };
   removeEvent(date, idx) {
     if (this.state.events[date]) {
       let events = this.state.events;
@@ -211,9 +211,9 @@ class Calendar extends React.Component {
         this.removeEvents(date);
       } else {
         this.setState({ events: events });
-      }
-    }
-  }
+      };
+    };
+  };
 
   render() {
     let date = new Date(this.state.year, this.state.month, 1);
@@ -231,8 +231,8 @@ class Calendar extends React.Component {
         calendar[i] = i - weekDay + 2;
       } else {
         calendar[i] = '';
-      }
-    }
+      };
+    };
 
     let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((item, i) => {
       return (<div className="day">{item}</div>);
@@ -258,9 +258,9 @@ class Calendar extends React.Component {
           for (let i = 0; i < events.length; ++i) {
             if (events[i].includes(this.state.search)) {
               hasMatches = true; break;
-            }
-          }
-        }
+            };
+          };
+        };
         return (
           <Day key={i} day={item} selected={selected}
             hasEvents={hasEvents} hasMatches={hasMatches}
@@ -269,7 +269,7 @@ class Calendar extends React.Component {
         );
       } else {
         return (<Day key={i} day={-1} />);
-      }
+      };
     });
     let events = this.getEvents(this.state.cursor).map((item, i) => {
       return (
@@ -312,7 +312,7 @@ class Calendar extends React.Component {
               </div>    
       </React.Fragment>
     );
-  }
-}
+  };
+};
 
 export default Calendar;
