@@ -62,7 +62,7 @@ export const drinks = drink => {
 
 export const getAllEvents = event => {
   return axios
-    .get("/getAllEvents/" + event.userId)
+    .post("/getAllEvents/" + event.userId)
     .then(response => {
       return response.data;
     })
@@ -73,7 +73,7 @@ export const getAllEvents = event => {
 
 export const removeEvent = event => {
   return axios
-    .get("/removeEvent/" + event.userId + "/" + event.date + "/" + event.event)
+    .post("/removeEvent/" + event.userId + "/" + event.date + "/" + event.event)
     .then(response => {
       return response.data;
     })

@@ -21,7 +21,7 @@ drinks.post("/addDrink", function (req, res) {
         })
 });
 
-drinks.get("/getAllEvents/:userId", function (req, res) {
+drinks.post("/getAllEvents/:userId", function (req, res) {
     Drink.find({ userId: req.params.userId })
         .then(function (events) {
             res.json(events);
@@ -31,7 +31,7 @@ drinks.get("/getAllEvents/:userId", function (req, res) {
     });
 });
 
-drinks.get("/removeEvent/:userId/:date/:event", function (req, res) {
+drinks.post("/removeEvent/:userId/:date/:event", function (req, res) {
     Drink.deleteOne({ userId: req.params.userId, date: req.params.date, event: req.params.event })
         .then(function (events) {
             res.json(events);
