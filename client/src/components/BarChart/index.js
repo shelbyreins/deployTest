@@ -21,6 +21,8 @@ class BarChart extends Component {
 
         getAllEvents(userId).then(res => {
             if (res) {
+                var res = JSON.stringify(res);
+                res = JSON.parse(res);
                 res.forEach(entry => {
                     switch (entry.event) {
                         case "Watched Video":
@@ -38,7 +40,7 @@ class BarChart extends Component {
                         case "Other":
                             other++;
                             break;
-                    }
+                    };
                 });
                 window.options = {
                     animationEnabled: true,
@@ -65,19 +67,19 @@ class BarChart extends Component {
                             { y: other, label: "Other" }
                         ]
                     }]
-                }
+                };
 
-            }
+            };
         });
         return (
             <div>
                 <CanvasJSChart options={window.options}
-                
+
                 />
             </div>
         );
 
-    }
+    };
     addSymbols(e) {
         var suffixes = ["", "K", "M", "B"];
         var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
@@ -85,7 +87,7 @@ class BarChart extends Component {
             order = suffixes.length - 1;
         var suffix = suffixes[order];
         return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
-    }
-}
+    };
+};
 
 export default BarChart;
