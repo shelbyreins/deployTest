@@ -149,7 +149,7 @@ class Calendar extends React.Component {
     };
     getAllEvents(userId).then(res => {
       if (res) {
-
+        JSON.stringify(res);
         res.forEach(entry => {
           occasions[entry.date] = [entry.event];
         });
