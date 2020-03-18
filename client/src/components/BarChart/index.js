@@ -21,8 +21,7 @@ class BarChart extends Component {
 
         getAllEvents(userId).then(res => {
             if (res) {
-                var res = JSON.stringify(res);
-                res = JSON.parse(res);
+                
                 res.forEach(entry => {
                     switch (entry.event) {
                         case "Watched Video":
